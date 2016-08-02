@@ -1,15 +1,11 @@
+module fact_pack.category_data;
+
 import std.stdio;
 import std.json;
-import std.variant;
 
 import fact_pack.packdata;
 import jsonizer;
-import jsonizer.internal.util;
-
-string genericFoo(T)(T bar)
-{
-    return to!string(bar);
-}
+import jsonizer.internal.util : findAttribute;
 
 struct CDHeader
 {
@@ -31,26 +27,6 @@ struct CDItem
     }
 }
 
-class EnSource
-{
-    mixin JsonizeMe;
-    mixin CategoryData;
-
-    @jsonize string usage_priority;
-    @CDItem("source_type", "type") @jsonize string type;
-}
-
-class SomeClass
-{
-    mixin JsonizeMe;
-    mixin CategoryData;
-
-    @jsonize @CDItem("Name") string name;
-    @jsonize string type;
-    @jsonize string energy_usage;
-    @CDItem @jsonize EnSource energy_source;
-}
-
 mixin template CategoryData()
 {
     private CDHeader[] cachedHeaders;
@@ -69,30 +45,15 @@ mixin template CategoryData()
 
                 foreach (attr; found)
                 {
-                    // pragma(msg, "foo ", attr);
                     alias MemberType = typeof(mixin(x));
-                    // pragma(msg, x, " ", typeof(x), " ", typeof(mixin(x)));
-
-                    auto mem = __traits(getMember, this, x);
 
                     static if (is(MemberType == class))
                     {
-                        ret ~= mem.parse(pd);
+                        ret ~= __traits(getMember, this, x).parse(pd);
                     }
                     else
                     {
-                        // pragma(msg, "xd ", "ret ~= " ~ attr.parser ~ ";");
-
-                        static if (attr.parser == null)
-                        {
-                            mixin("ret ~= this." ~ x ~ ";");
-                        }
-                        else
-                        {
-                            mixin("ret ~= " ~ attr.parser ~ ";");
-                        }
-
-                        // ret ~= foo;
+                        mixin("ret ~= " ~ (attr.parser ? attr.parser : "this." ~ x) ~ ";");
                     }
                 }
             }
@@ -122,16 +83,12 @@ mixin template CategoryData()
                 {
                     alias MemberType = typeof(mixin(x));
 
-                    auto mem = __traits(getMember, this, x);
-
                     static if (is(MemberType == class))
                     {
-                        ret ~= mem.getHeaders();
+                        ret ~= __traits(getMember, this, x).getHeaders();
                     }
                     else
                     {
-                        // pragma(msg, "xd ", "ret ~= Header(\"" ~ attr.display ~ "\", " ~ (attr.raw ? "true" : "false") ~ ");");
-
                         mixin(
                             "ret ~= CDHeader(\"" ~ attr.display ~ "\", " ~ (
                             attr.raw ? "true" : "false") ~ ");");
@@ -142,37 +99,8 @@ mixin template CategoryData()
 
         return ret;
     }
-}
 
-// mixin(GenStruct!("Food", "bar"));
-
-void what(int delegate(int) foo)
-{
-    writeln(foo(1));
-}
-
-void theTest(ref Packdata pd)
-{
-    auto bar = delegate(int x) => x * 5;
-    // writeln(typeof(bar));
-    what(bar);
-
-    foreach (assem; pd.mem["assembling-machine"].object)
-    {
-        auto s = fromJSON!SomeClass(assem);
-
-        writeln(s.name);
-        writeln("    name=", s.name);
-        writeln("    type=", s.type);
-        writeln("    energy_usage=", s.energy_usage);
-        writeln("    ", s.getHeaders());
-        writeln("    ", s.parse(pd));
+    override bool hasCategoryData() {
+        return true;
     }
-}
-
-static this()
-{
-    // SomeClass s;    
-    // writeln("foo");
-    // s._fromJSON();
 }

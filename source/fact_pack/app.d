@@ -6,12 +6,9 @@ import std.datetime;
 import fact_pack.packdata;
 import fact_pack.all_types;
 
-import testfoo;
-
 void test(ref Packdata pd)
 {
     // writeln("copper-ore=", pd.resources["copper-ore"].title);
-    theTest(pd);
 }
 
 void main()
