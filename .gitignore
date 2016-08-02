@@ -3,7 +3,7 @@ docs.json
 __dummy.html
 *.o
 *.obj
-fact_pack
+/fact_pack
 libfact_pack.a
 dub.selections.json
 .vscode
