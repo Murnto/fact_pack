@@ -11,13 +11,13 @@ string genericFoo(T)(T bar)
     return to!string(bar);
 }
 
-struct Header
+struct CDHeader
 {
     string name;
     bool raw;
 }
 
-struct Mark
+struct CDItem
 {
     string display;
     bool raw;
@@ -34,26 +34,26 @@ struct Mark
 class EnSource
 {
     mixin JsonizeMe;
-    mixin FooBar;
+    mixin CategoryData;
 
     @jsonize string usage_priority;
-    @Mark("source_type", "type") @jsonize string type;
+    @CDItem("source_type", "type") @jsonize string type;
 }
 
 class SomeClass
 {
     mixin JsonizeMe;
-    mixin FooBar;
+    mixin CategoryData;
 
-    @jsonize @Mark("Name") string name;
+    @jsonize @CDItem("Name") string name;
     @jsonize string type;
     @jsonize string energy_usage;
-    @Mark @jsonize EnSource energy_source;
+    @CDItem @jsonize EnSource energy_source;
 }
 
-mixin template FooBar()
+mixin template CategoryData()
 {
-    private Header[] cachedHeaders;
+    private CDHeader[] cachedHeaders;
 
     string[] parse(Packdata pd)
     {
@@ -64,7 +64,7 @@ mixin template FooBar()
         foreach (x; __traits(allMembers, T))
         {
             static if (__traits(compiles, __traits(getMember, this, x))) {
-                alias found = findAttribute!(Mark, __traits(getMember, this, x));
+                alias found = findAttribute!(CDItem, __traits(getMember, this, x));
 
                 foreach (attr; found)
                 {
@@ -96,21 +96,21 @@ mixin template FooBar()
         return ret;
     }
 
-    Header[] getHeaders()
+    CDHeader[] getHeaders()
     {
         if (cachedHeaders !is null)
         {
             return cachedHeaders;
         }
 
-        Header[] ret;
+        CDHeader[] ret;
 
         alias T = typeof(this);
 
         foreach (x; __traits(allMembers, T))
         {
             static if (__traits(compiles, __traits(getMember, this, x))) {
-                alias found = findAttribute!(Mark, __traits(getMember, this, x));
+                alias found = findAttribute!(CDItem, __traits(getMember, this, x));
 
                 foreach (attr; found)
                 {
@@ -124,7 +124,7 @@ mixin template FooBar()
                     } else {
                         // pragma(msg, "xd ", "ret ~= Header(\"" ~ attr.display ~ "\", " ~ (attr.raw ? "true" : "false") ~ ");");
                         
-                        mixin("ret ~= Header(\"" ~ attr.display ~ "\", " ~ (attr.raw ? "true" : "false") ~ ");");
+                        mixin("ret ~= CDHeader(\"" ~ attr.display ~ "\", " ~ (attr.raw ? "true" : "false") ~ ");");
                     }
                 }
             }
