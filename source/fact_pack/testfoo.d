@@ -63,7 +63,8 @@ mixin template CategoryData()
 
         foreach (x; __traits(allMembers, T))
         {
-            static if (__traits(compiles, __traits(getMember, this, x))) {
+            static if (__traits(compiles, __traits(getMember, this, x)))
+            {
                 alias found = findAttribute!(CDItem, __traits(getMember, this, x));
 
                 foreach (attr; found)
@@ -77,16 +78,20 @@ mixin template CategoryData()
                     static if (is(MemberType == class))
                     {
                         ret ~= mem.parse(pd);
-                    } else {
+                    }
+                    else
+                    {
                         // pragma(msg, "xd ", "ret ~= " ~ attr.parser ~ ";");
-                        
+
                         static if (attr.parser == null)
                         {
                             mixin("ret ~= this." ~ x ~ ";");
-                        } else {
+                        }
+                        else
+                        {
                             mixin("ret ~= " ~ attr.parser ~ ";");
                         }
-                    
+
                         // ret ~= foo;
                     }
                 }
@@ -109,7 +114,8 @@ mixin template CategoryData()
 
         foreach (x; __traits(allMembers, T))
         {
-            static if (__traits(compiles, __traits(getMember, this, x))) {
+            static if (__traits(compiles, __traits(getMember, this, x)))
+            {
                 alias found = findAttribute!(CDItem, __traits(getMember, this, x));
 
                 foreach (attr; found)
@@ -121,10 +127,14 @@ mixin template CategoryData()
                     static if (is(MemberType == class))
                     {
                         ret ~= mem.getHeaders();
-                    } else {
+                    }
+                    else
+                    {
                         // pragma(msg, "xd ", "ret ~= Header(\"" ~ attr.display ~ "\", " ~ (attr.raw ? "true" : "false") ~ ");");
-                        
-                        mixin("ret ~= CDHeader(\"" ~ attr.display ~ "\", " ~ (attr.raw ? "true" : "false") ~ ");");
+
+                        mixin(
+                            "ret ~= CDHeader(\"" ~ attr.display ~ "\", " ~ (
+                            attr.raw ? "true" : "false") ~ ");");
                     }
                 }
             }
@@ -143,7 +153,7 @@ void what(int delegate(int) foo)
 
 void theTest(ref Packdata pd)
 {
-    auto bar = delegate (int x) => x * 5;
+    auto bar = delegate(int x) => x * 5;
     // writeln(typeof(bar));
     what(bar);
 
