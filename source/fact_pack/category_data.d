@@ -3,9 +3,11 @@ module fact_pack.category_data;
 import std.stdio;
 import std.json;
 
-import fact_pack.packdata;
 import jsonizer;
-import jsonizer.internal.util : findAttribute;
+
+
+import fact_pack.packdata;
+import fact_pack.all_types;
 
 struct CDHeader
 {
@@ -16,8 +18,8 @@ struct CDHeader
 struct CDItem
 {
     string display;
-    bool raw;
     string parser;
+    bool raw;
 
     this(string display, string func = null, bool raw = false)
     {
@@ -27,12 +29,59 @@ struct CDItem
     }
 }
 
+struct CDContainer
+{
+    string name;
+    string title;
+    CDHeader[] headers;
+    BasicEnt[] ents;
+}
+
+mixin template EnumerateCategoryData()
+{
+    CDContainer[string] enumerateCategoryData()
+    {
+        import std.traits;
+
+        CDContainer[string] ret;
+
+        pragma(msg, "entityClasses()");
+        foreach (mem; __traits(allMembers, typeof(this)))
+        {
+            static if (__traits(compiles, typeof(__traits(getMember, this,
+                    mem))) && !isSomeFunction!(__traits(getMember, this, mem)))
+            {
+                alias MemberType = typeof(__traits(getMember, this, mem));
+                pragma(msg, "mem= ", mem, " | ", MemberType);
+                static if (__traits(compiles, KeyType!MemberType))
+                {
+                    alias VType = ValueType!MemberType;
+                    alias KType = KeyType!MemberType;
+                    static if (is(KType == string) && hasMember!(VType, "getHeaders")) {
+                        pragma(msg, "    ", isAssignable!(BasicEnt, VType));
+                        auto cdc = CDContainer();
+                        mixin("cdc.ents = cast(BasicEnt[])" ~ mem ~ ".values();");
+                        mixin("cdc.headers = " ~ mem ~ ".values()[0].getHeaders();");
+                        cdc.title = VType.stringof;
+                        cdc.name = mem;
+                        ret[mem] = cdc;
+                    }
+                }
+            }
+        }
+
+        return ret;
+    }
+}
+
 mixin template CategoryData()
 {
     private CDHeader[] cachedHeaders;
 
     string[] parse(Packdata pd)
     {
+        import jsonizer.internal.util : findAttribute;
+        
         string[] ret;
 
         alias T = typeof(this);
@@ -64,6 +113,8 @@ mixin template CategoryData()
 
     CDHeader[] getHeaders()
     {
+        import jsonizer.internal.util : findAttribute;
+
         if (cachedHeaders !is null)
         {
             return cachedHeaders;

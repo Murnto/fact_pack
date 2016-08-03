@@ -13,6 +13,14 @@ class BasicEnt
     @jsonize string name;
     @jsonize string type;
     string title;
+
+    // todo figure out a nice way to automatically list all
+    // category data from packdata so that we can list out
+    // generic category info (ie. on itemcats/)
+
+    bool hasCategoryData() {
+        return false;
+    }
 }
 
 struct Color

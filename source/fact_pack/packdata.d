@@ -11,6 +11,7 @@ import std.algorithm : canFind, sort;
 import dini;
 import jsonizer;
 import fact_pack.all_types;
+import fact_pack.category_data;
 
 public const static string[] ALTERNATE_ITEM_TYPES = [
     "ammo", "armor", "blueprint", "capsule", "deconstruction-item", "fluid", "gun", "item",
@@ -39,6 +40,8 @@ class PackMetadata
 
 class Packdata
 {
+    mixin EnumerateCategoryData;
+
     Recipe[string] recipes;
     Item[string] items;
     Fluid[string] fluids;
@@ -146,7 +149,7 @@ class Packdata
                 else
                 {
                     writeln("Technology '", t.name, "' requires '", req_name,
-                            "' which doesn't exist!");
+                        "' which doesn't exist!");
                 }
             }
         }
@@ -254,7 +257,7 @@ class Packdata
     }
 
     Craftable*[] search_craftable(string name, const int limit_results = 25,
-            const bool include_title = true)
+        const bool include_title = true)
     {
         name = name.toLower;
         Craftable*[] ret;
