@@ -1,6 +1,7 @@
 module fact_pack.all_types;
 
 public import std.string : join;
+public import std.math : round;
 public import fact_pack.category_data;
 
 public import fact_pack.packdata;

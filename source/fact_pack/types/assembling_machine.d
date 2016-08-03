@@ -14,10 +14,10 @@ class AssemblingMachine : BasicEnt
     mixin JsonizeMe!(JsonizeIgnoreExtraKeys.no);
 
     @CDItem("# Module slots") int module_slots;
-    @CDItem("Crafting speed") real crafting_speed;
     @CDItem("Ingredient count") int ingredient_count;
     @CDItem("Energy usage") string energy_usage;
     @CDItem EnergySource energy_source;
+    @CDItem("Crafting speed") real crafting_speed;
     @CDItem("Crafting categories", "join(crafting_categories, \", \")") string[] crafting_categories;
     string[] allowed_effects;
     JSONValue _module_specification;

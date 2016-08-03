@@ -13,13 +13,19 @@ class BasicEnt
 
     @jsonize string name;
     @jsonize string type;
-    @CDItem("Name") string title;
+    @CDItem("Name", "getEntAnchor(pd.meta.name)", true) string title;
     @CDItem("Icon", "getIconImg(pd.meta.name)", true) @jsonize(JsonizeIn.opt) string icon;
 
     protected string getIconImg(string packName)
     {
         // TODO: this function shoudln't exist, we should use one from WebPackdata
         return "<img src=\"/pack/" ~ packName ~ "/icon/" ~ this.type ~ "/" ~ this.name ~ ".png\" />";
+    }
+
+    protected string getEntAnchor(string packName)
+    {
+        // TODO: this function shoudln't exist, we should use the popover one from WebPackdata
+        return "<a href=\"/pack/" ~ packName ~ "/i/" ~ this.type ~ "/" ~ this.name ~ "\">" ~ this.title ~ "</a>";
     }
 
     // todo figure out a nice way to automatically list all
@@ -71,8 +77,8 @@ class EnergySource
     {
         int fuel_inventory_size;
         int effectivity;
-        float emissions;
-        string usage_priority;
+        @CDItem("Emissions", "round(emissions * 100) / 100") float emissions;
+        @CDItem("Energy priority") string usage_priority;
         string input_priority; // what?
         string output_flow_limit;
         string buffer_capacity;
