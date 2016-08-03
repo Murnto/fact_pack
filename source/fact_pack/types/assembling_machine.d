@@ -8,7 +8,7 @@ import jsonizer;
 import fact_pack.all_types;
 import fact_pack.json_utils;
 
-class AssemblingMachine : HasIcon
+class AssemblingMachine : BasicEnt
 {
     mixin CategoryData;
     mixin JsonizeMe!(JsonizeIgnoreExtraKeys.no);

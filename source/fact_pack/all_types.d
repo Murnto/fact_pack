@@ -1,6 +1,8 @@
 module fact_pack.all_types;
 
+public import std.string : join;
 public import fact_pack.category_data;
+
 public import fact_pack.packdata;
 public import fact_pack.types.assembling_machine;
 public import fact_pack.types.fluid;

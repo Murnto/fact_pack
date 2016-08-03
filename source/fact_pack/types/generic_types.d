@@ -1,6 +1,7 @@
 module fact_pack.types.generic_types;
 
 import std.json;
+import std.exception;
 
 import jsonizer;
 
@@ -12,7 +13,14 @@ class BasicEnt
 
     @jsonize string name;
     @jsonize string type;
-    string title;
+    @CDItem("Name") string title;
+    @CDItem("Icon", "getIconImg(pd.meta.name)", true) @jsonize(JsonizeIn.opt) string icon;
+
+    protected string getIconImg(string packName)
+    {
+        // TODO: this function shoudln't exist, we should use one from WebPackdata
+        return "<img src=\"/pack/" ~ packName ~ "/icon/" ~ this.type ~ "/" ~ this.name ~ ".png\" />";
+    }
 
     // todo figure out a nice way to automatically list all
     // category data from packdata so that we can list out
@@ -20,6 +28,11 @@ class BasicEnt
 
     bool hasCategoryData() {
         return false;
+    }
+
+    string[] parse(Packdata pd)
+    {
+        assert(false);
     }
 }
 
@@ -33,7 +46,7 @@ struct Color
     }
 }
 
-class Craftable : HasIcon
+class Craftable : BasicEnt
 {
     mixin JsonizeMe;
 
@@ -43,21 +56,15 @@ class Craftable : HasIcon
     @jsonize(JsonizeIn.opt) string subgroup;
 }
 
-class HasIcon : BasicEnt
-{
-    mixin JsonizeMe;
-
-    @jsonize(JsonizeIn.opt) string icon;
-}
-
 class EnergySource
 {
+    mixin CategoryData;
     mixin JsonizeMe;
     // mixin JsonizeMe!(JsonizeIgnoreExtraKeys.no);
 
     @jsonize
     {
-        string type;
+        @CDItem("Energy type") string type;
     }
 
     @jsonize(JsonizeIn.opt)

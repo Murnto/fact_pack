@@ -27,7 +27,7 @@ struct TechUnit
     }
 }
 
-class Technology : HasIcon
+class Technology : BasicEnt
 {
     mixin JsonizeMe;
     // mixin JsonizeMe!(JsonizeIgnoreExtraKeys.no);

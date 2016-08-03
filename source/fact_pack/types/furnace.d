@@ -7,7 +7,7 @@ import jsonizer;
 import fact_pack.all_types;
 import fact_pack.json_utils;
 
-class Furnace : HasIcon
+class Furnace : BasicEnt
 {
     // mixin JsonizeMe;
     mixin JsonizeMe!(JsonizeIgnoreExtraKeys.no);
