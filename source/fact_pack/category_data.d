@@ -1,6 +1,7 @@
 module fact_pack.category_data;
 
 import std.stdio;
+import std.algorithm : reverse;
 import std.json;
 
 import jsonizer;
@@ -45,20 +46,20 @@ mixin template EnumerateCategoryData()
 
         CDContainer[string] ret;
 
-        pragma(msg, "entityClasses()");
+        // pragma(msg, "entityClasses()");
         foreach (mem; __traits(allMembers, typeof(this)))
         {
             static if (__traits(compiles, typeof(__traits(getMember, this,
                     mem))) && !isSomeFunction!(__traits(getMember, this, mem)))
             {
                 alias MemberType = typeof(__traits(getMember, this, mem));
-                pragma(msg, "mem= ", mem, " | ", MemberType);
+                // pragma(msg, "mem= ", mem, " | ", MemberType);
                 static if (__traits(compiles, KeyType!MemberType))
                 {
                     alias VType = ValueType!MemberType;
                     alias KType = KeyType!MemberType;
                     static if (is(KType == string) && hasMember!(VType, "getHeaders")) {
-                        pragma(msg, "    ", isAssignable!(BasicEnt, VType));
+                        // pragma(msg, "    ", isAssignable!(BasicEnt, VType));
                         auto cdc = CDContainer();
                         mixin("cdc.ents = cast(BasicEnt[])" ~ mem ~ ".values();");
                         mixin("cdc.headers = " ~ mem ~ ".values()[0].getHeaders();");
@@ -102,12 +103,13 @@ mixin template CategoryData()
                     }
                     else
                     {
-                        mixin("ret ~= " ~ (attr.parser ? attr.parser : "this." ~ x) ~ ";");
+                        mixin("ret ~= to!string(" ~ (attr.parser ? attr.parser : "this." ~ x) ~ ");");
                     }
                 }
             }
         }
 
+        reverse(ret);
         return ret;
     }
 
@@ -148,10 +150,14 @@ mixin template CategoryData()
             }
         }
 
+        reverse(ret);
         return ret;
     }
 
-    override bool hasCategoryData() {
-        return true;
+    import std.traits;
+    static if (isAssignable!(BasicEnt, typeof(this))) {
+        override bool hasCategoryData() {
+            return true;
+        }
     }
 }
