@@ -1,6 +1,7 @@
 module fact_pack.types.assembling_machine;
 
 import std.json;
+import std.stdio;
 
 import jsonizer;
 
@@ -9,22 +10,22 @@ import fact_pack.json_utils;
 
 class AssemblingMachine : HasIcon
 {
-    // mixin JsonizeMe;
+    mixin CategoryData;
     mixin JsonizeMe!(JsonizeIgnoreExtraKeys.no);
 
-    real crafting_speed;
-    int ingredient_count;
-    string energy_usage;
-    EnergySource energy_source;
-    string[] crafting_categories;
+    @CDItem("# Module slots") int module_slots;
+    @CDItem("Crafting speed") real crafting_speed;
+    @CDItem("Ingredient count") int ingredient_count;
+    @CDItem("Energy usage") string energy_usage;
+    @CDItem EnergySource energy_source;
+    @CDItem("Crafting categories", "join(crafting_categories, \", \")") string[] crafting_categories;
     string[] allowed_effects;
     JSONValue _module_specification;
-    long module_slots;
 
     @jsonize this(string name, string icon, string type, real crafting_speed,
-            string energy_usage, JSONValue energy_source,
-            int ingredient_count, JSONValue crafting_categories,
-            JSONValue allowed_effects = null, JSONValue module_specification = null)
+        string energy_usage, JSONValue energy_source, int ingredient_count,
+        JSONValue crafting_categories, JSONValue allowed_effects = null,
+        JSONValue module_specification = null)
     {
         this.name = name;
         this.icon = icon;
@@ -41,7 +42,7 @@ class AssemblingMachine : HasIcon
         if (!module_specification.isNull)
         {
             this._module_specification = module_specification;
-            this.module_slots = module_specification["module_slots"].integer;
+            this.module_slots = fromJSON!int(module_specification["module_slots"]);
         }
         if (!allowed_effects.isNull)
         {
