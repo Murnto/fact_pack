@@ -3,6 +3,8 @@ module fact_pack.category_data;
 import std.stdio;
 import std.algorithm : reverse;
 import std.json;
+import std.regex : replaceAll, regex;
+import std.string : chomp;
 
 import jsonizer;
 
@@ -63,7 +65,7 @@ mixin template EnumerateCategoryData()
                         auto cdc = CDContainer();
                         mixin("cdc.ents = cast(BasicEnt[])" ~ mem ~ ".values();");
                         mixin("cdc.headers = " ~ mem ~ ".values()[0].getHeaders();");
-                        cdc.title = VType.stringof;
+                        cdc.title = chomp(replaceAll(VType.stringof, regex("([A-Z])"), " $1")) ~ "s";
                         cdc.name = mem;
                         ret[mem] = cdc;
                     }
