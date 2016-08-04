@@ -9,17 +9,17 @@ import fact_pack.json_utils;
 
 class Resource : BasicEnt
 {
-    // mixin JsonizeMe;
+    mixin CategoryData;
     mixin JsonizeMe!(JsonizeIgnoreExtraKeys.no);
 
     string order;
-    string category;
-    real[3] map_color;
+    @CDItem("Category")string category;
+    @CDItem("Map Color", "hexMapColor()") real[3] map_color;
     JSONValue minable; // optional
-    int normal; // optional
-    int minimum; // optional
+    @CDItem("Normal")int normal; // optional
+    @CDItem("Minimum") int minimum; // optional
     bool map_grid; // optional
-    bool infinite; // optional
+    @CDItem("Infinite", "infinite ? \"Yes\" : \"No\"") bool infinite; // optional
 
     @jsonize this(string type, string name, string icon, string order, JSONValue map_color,
             JSONValue minable = null, string category = "basic-solid", int normal = -1,
@@ -38,5 +38,14 @@ class Resource : BasicEnt
         this.minimum = minimum;
         this.map_grid = map_grid;
         this.infinite = infinite;
+    }
+
+    string hexMapColor()
+    {
+        import std.math : round;
+        // real function(real) clamp = (x) => (x < 0 ? 0 : x > 1 ? 1 : x);
+        // string function(real) toByteStr = (x) => (to!string(round()));
+
+        return "#000000";
     }
 }
