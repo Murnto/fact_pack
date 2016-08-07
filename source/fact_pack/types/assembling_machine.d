@@ -13,7 +13,7 @@ class AssemblingMachine : BasicEnt
     mixin CategoryData;
     mixin JsonizeMe!(JsonizeIgnoreExtraKeys.no);
 
-    @CDItem("# Module slots") int module_slots;
+    @CDItem("Module slots") int module_slots;
     @CDItem("Ingredient count") int ingredient_count;
     @CDItem("Energy usage") string energy_usage;
     @CDItem EnergySource energy_source;
