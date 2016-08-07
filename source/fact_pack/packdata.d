@@ -47,6 +47,9 @@ class Packdata
     Fluid[string] fluids;
     ItemSubgroup[string] item_subgroups;
     Resource[string] resources;
+    SteamBoiler[string] steamBoilers;
+    Generator[string] generators;
+    SolarPanel[string] solarPanels;
     Technology[string] technology;
     Furnace[string] furnaces;
     MiningDrill[string] miningDrills;
@@ -97,6 +100,9 @@ class Packdata
         load_json(this.recipes, mem["recipe"]);
         load_json(this.item_subgroups, mem["item-subgroup"]);
         load_json(this.resources, mem["resource"]);
+        load_json(this.generators, mem["generator"]);
+        load_json(this.solarPanels, mem["solar-panel"]);
+        load_json(this.steamBoilers, mem["boiler"]);
         load_json(this.accumulators, mem["accumulator"]);
         load_json(this.furnaces, mem["furnace"]);
         load_json(this.miningDrills, mem["mining-drill"]);
