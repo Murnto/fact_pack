@@ -1,6 +1,7 @@
 module fact_pack.types.recipe;
 
 import std.json;
+import std.conv : to;
 
 import jsonizer;
 

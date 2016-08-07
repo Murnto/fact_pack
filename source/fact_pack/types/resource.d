@@ -1,6 +1,7 @@
 module fact_pack.types.resource;
 
 import std.json;
+import std.conv : to;
 import std.math : isNaN;
 
 import jsonizer;

@@ -1,9 +1,7 @@
 module fact_pack.category_data;
 
 import std.stdio;
-import std.algorithm : reverse;
 import std.json;
-import std.regex : replaceAll, regex;
 import std.string : chomp;
 
 import jsonizer;
@@ -45,6 +43,7 @@ mixin template EnumerateCategoryData()
     CDContainer[string] enumerateCategoryData()
     {
         import std.traits;
+        import std.regex : replaceAll, regex;
 
         CDContainer[string] ret;
 
@@ -83,8 +82,9 @@ mixin template CategoryData()
 
     string[] parse(Packdata pd)
     {
-        import jsonizer.internal.util : findAttribute;
+        import std.algorithm : reverse;
         import std.conv : to;
+        import jsonizer.internal.util : findAttribute;
         
         string[] ret;
 
@@ -118,6 +118,7 @@ mixin template CategoryData()
 
     CDHeader[] getHeaders()
     {
+        import std.algorithm : reverse;
         import jsonizer.internal.util : findAttribute;
 
         if (cachedHeaders !is null)
