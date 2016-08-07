@@ -9,18 +9,18 @@ import fact_pack.json_utils;
 
 class MiningDrill : BasicEnt
 {
-    // mixin JsonizeMe;
+    mixin CategoryData;
     mixin JsonizeMe!(JsonizeIgnoreExtraKeys.no);
 
-    real mining_speed;
-    real mining_power;
-    real resource_searching_radius;
-    string energy_usage;
-    EnergySource energy_source;
-    string[] resource_categories;
+    @CDItem("Radius") real resource_searching_radius;
+    @CDItem("Resource Categories", "join(resource_categories, \", \")") string[] resource_categories;
+    @CDItem("Module slots") long module_slots;
+    @CDItem("Mining speed") real mining_speed;
+    @CDItem("Mining power") real mining_power;
+    @CDItem("Energy usage") string energy_usage;
+    @CDItem EnergySource energy_source;
     string[] module_specification;
     JSONValue _module_specification;
-    long module_slots;
 
     @jsonize this(string name, string icon, string type, real mining_power,
             real mining_speed, real resource_searching_radius,
