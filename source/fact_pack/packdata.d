@@ -50,6 +50,7 @@ class Packdata
     Technology[string] technology;
     Furnace[string] furnaces;
     MiningDrill[string] miningDrills;
+    Accumulator[string] accumulators;
     AssemblingMachine[string] assemblingMachines;
     PackMetadata meta;
     Craftable[string][string] all_items;
@@ -96,6 +97,7 @@ class Packdata
         load_json(this.recipes, mem["recipe"]);
         load_json(this.item_subgroups, mem["item-subgroup"]);
         load_json(this.resources, mem["resource"]);
+        load_json(this.accumulators, mem["accumulator"]);
         load_json(this.furnaces, mem["furnace"]);
         load_json(this.miningDrills, mem["mining-drill"]);
         load_json(this.assemblingMachines, mem["assembling-machine"]);

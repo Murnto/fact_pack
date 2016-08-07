@@ -87,3 +87,30 @@ class EnergySource
         JSONValue smoke;
     }
 }
+
+// TODO: Nicely merge with above
+class EnergySourceProvider
+{
+    mixin CategoryData;
+    mixin JsonizeMe;
+    // mixin JsonizeMe!(JsonizeIgnoreExtraKeys.no);
+
+    @jsonize
+    {
+        @CDItem("Energy type") string type;
+    }
+
+    @jsonize(JsonizeIn.opt)
+    {
+        int fuel_inventory_size;
+        int effectivity;
+        float emissions;
+        @CDItem("Energy priority") string usage_priority;
+        string input_priority; // what?
+        @CDItem("Output limit") string output_flow_limit;
+        @CDItem("Capacity") string buffer_capacity;
+        @CDItem("Input limit") string input_flow_limit;
+        string drain;
+        JSONValue smoke;
+    }
+}

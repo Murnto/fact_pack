@@ -16,3 +16,4 @@ public import fact_pack.types.mining_drill;
 public import fact_pack.types.recipe;
 public import fact_pack.types.resource;
 public import fact_pack.types.technology;
+public import fact_pack.types.accumulator;
