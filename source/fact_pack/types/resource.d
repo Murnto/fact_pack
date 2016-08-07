@@ -1,6 +1,7 @@
 module fact_pack.types.resource;
 
 import std.json;
+import std.math : isNaN;
 
 import jsonizer;
 
@@ -13,17 +14,20 @@ class Resource : BasicEnt
     mixin JsonizeMe!(JsonizeIgnoreExtraKeys.no);
 
     string order;
-    @CDItem("Category")string category;
-    @CDItem("Map Color", "hexMapColor()") real[3] map_color;
+    @CDItem("Map Color", "hexMapColor()", true) real[3] map_color;
     JSONValue minable; // optional
-    @CDItem("Normal")int normal; // optional
-    @CDItem("Minimum") int minimum; // optional
+    @CDItem("Normal", "isNaN(normal) ? \"\" : to!string(normal)") real normal; // optional
+    @CDItem("Minimum", "isNaN(minimum) ? \"\" : to!string(minimum)") real minimum; // optional
+    @CDItem("Mining time") real mining_time; // optional
+    @CDItem("Hardness") real hardness; // optional
     bool map_grid; // optional
     @CDItem("Infinite", "infinite ? \"Yes\" : \"No\"") bool infinite; // optional
+    @CDItem("Category") string category;
 
-    @jsonize this(string type, string name, string icon, string order, JSONValue map_color,
-            JSONValue minable = null, string category = "basic-solid", int normal = -1,
-            int minimum = -1, bool map_grid = true, bool infinite = false)
+    @jsonize this(string type, string name, string icon, string order,
+        JSONValue map_color, JSONValue minable = null,
+        string category = "basic-solid", real normal = real.nan,
+        real minimum = real.nan, bool map_grid = true, bool infinite = false)
     {
 
         this.type = type;
@@ -38,14 +42,28 @@ class Resource : BasicEnt
         this.minimum = minimum;
         this.map_grid = map_grid;
         this.infinite = infinite;
+        if (minable.type == JSON_TYPE.OBJECT)
+        {
+            if (!minable["hardness"].isNull)
+            {
+                this.hardness = fromJSON!real(minable["hardness"]);
+            }
+            if (!minable["mining_time"].isNull)
+            {
+                this.mining_time = fromJSON!real(minable["mining_time"]);
+            }
+        }
     }
 
     string hexMapColor()
     {
         import std.math : round;
-        // real function(real) clamp = (x) => (x < 0 ? 0 : x > 1 ? 1 : x);
-        // string function(real) toByteStr = (x) => (to!string(round()));
+        import std.format : format;
 
-        return "#000000";
+        int function(real) clamp = (x) => to!int(round((x < 0 ? 0 : x > 1 ? 1 : x) * 255));
+        string hexColor = format("%02X%02X%02X", clamp(this.map_color[0]),
+            clamp(this.map_color[1]), clamp(this.map_color[2]));
+
+        return "<div class=\"cat-resource-color\" style=\"background: #" ~ hexColor ~ "\"></div>&nbsp;#" ~ hexColor;
     }
 }
