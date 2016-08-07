@@ -84,6 +84,7 @@ mixin template CategoryData()
     string[] parse(Packdata pd)
     {
         import jsonizer.internal.util : findAttribute;
+        import std.conv : to;
         
         string[] ret;
 
