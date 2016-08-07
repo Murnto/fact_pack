@@ -9,17 +9,17 @@ import fact_pack.json_utils;
 
 class Furnace : BasicEnt
 {
-    // mixin JsonizeMe;
+    mixin CategoryData;
     mixin JsonizeMe!(JsonizeIgnoreExtraKeys.no);
 
-    real crafting_speed;
-    string[] crafting_categories;
-    string energy_usage;
-    EnergySource energy_source;
+    @CDItem("Module slots") long module_slots;
+    @CDItem("Energy usage") string energy_usage;
+    @CDItem EnergySource energy_source;
     string[] module_specification;
     string[] allowed_effects;
     JSONValue _module_specification;
-    long module_slots;
+    @CDItem("Crafting speed") real crafting_speed;
+    @CDItem("Crafting categories", "join(crafting_categories, \", \")") string[] crafting_categories;
 
     @jsonize this(string name, string icon, string type, real crafting_speed,
             string energy_usage, JSONValue energy_source,
