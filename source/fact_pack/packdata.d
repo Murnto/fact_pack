@@ -57,6 +57,7 @@ class Packdata
     AssemblingMachine[string] assemblingMachines;
     PackMetadata meta;
     Craftable[string][string] all_items;
+    AssemblingMachine[][string] craftCategoryMap;
     string path;
     string[] sorted_tech;
     JSONValue mem;
@@ -142,6 +143,13 @@ class Packdata
 
         this.map_info_types();
 
+        foreach(ref assem; this.assemblingMachines)
+        {
+            foreach(ref cat; assem.crafting_categories)
+            {
+                this.craftCategoryMap[cat] ~= assem;
+            }
+        }
         foreach (ref Technology t; this.technology)
         {
             foreach (ref string req_name; t._prerequisites)
