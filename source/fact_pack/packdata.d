@@ -58,7 +58,7 @@ class Packdata
     AssemblingMachine[string] assemblingMachines;
     PackMetadata meta;
     Craftable[string][string] all_items;
-    AssemblingMachine[][string] craftCategoryMap;
+    AssemblingMachine*[][string] craftCategoryMap;
     string path;
     string[] sorted_tech;
     JSONValue mem;
@@ -148,8 +148,12 @@ class Packdata
         {
             foreach (ref cat; assem.crafting_categories)
             {
-                this.craftCategoryMap[cat] ~= assem;
+                this.craftCategoryMap[cat] ~= &assem;
             }
+        }
+        foreach (ref catAssems; this.craftCategoryMap.keys)
+        {
+            sort!((a, b) => sort_order!(AssemblingMachine*)(a,b))(this.craftCategoryMap[catAssems]);
         }
         foreach (ref Technology t; this.technology)
         {
@@ -389,8 +393,6 @@ class Packdata
 
     public bool sort_order(T)(const(T) a, const(T) b)
     {
-        import std.math : cmp;
-
         static if (is(T : ItemAmount*)) {
             Craftable* newA = find_craftable(a.info_type, a.name);
             Craftable* newB = find_craftable(b.info_type, b.name);
