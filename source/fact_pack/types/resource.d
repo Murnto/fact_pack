@@ -14,7 +14,6 @@ class Resource : BasicEnt
     mixin CategoryData;
     mixin JsonizeMe!(JsonizeIgnoreExtraKeys.no);
 
-    string order;
     @CDItem("Map Color", "hexMapColor()", true) real[3] map_color;
     JSONValue minable; // optional
     @CDItem("Normal", "isNaN(normal) ? \"\" : to!string(normal)") real normal; // optional

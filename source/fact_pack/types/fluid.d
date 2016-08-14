@@ -9,7 +9,6 @@ class Fluid : Craftable
     mixin JsonizeMe;
     // mixin JsonizeMe!(JsonizeIgnoreExtraKeys.no);
 
-    @jsonize string order;
     @jsonize Color base_color;
     @jsonize string heat_capacity;
     @jsonize Color flow_color;

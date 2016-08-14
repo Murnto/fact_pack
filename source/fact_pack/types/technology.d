@@ -33,7 +33,6 @@ class Technology : BasicEnt
     mixin JsonizeMe;
     // mixin JsonizeMe!(JsonizeIgnoreExtraKeys.no);
 
-    string order;
     TechUnit unit;
 
     // optional

@@ -13,7 +13,6 @@ class Item : Craftable
 
     @jsonize JSONValue flags;
     @jsonize int stack_size;
-    @jsonize(JsonizeIn.opt) string order;
     @jsonize(JsonizeIn.opt) string group;
     @jsonize(JsonizeIn.opt) JSONValue place_as_tile;
     @jsonize(JsonizeIn.opt) string dark_background_icon;

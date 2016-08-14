@@ -21,7 +21,6 @@ class Recipe : BasicEnt
     bool enabled = true;
     string category;
 
-    string order;
     string subgroup;
     string icon;
     // string main_product;

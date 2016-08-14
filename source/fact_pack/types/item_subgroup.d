@@ -10,7 +10,6 @@ class ItemSubgroup : BasicEnt
 
     @jsonize
     {
-        string order;
         string group;
     }
 }
