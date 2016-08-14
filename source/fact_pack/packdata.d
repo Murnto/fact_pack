@@ -14,8 +14,9 @@ import fact_pack.all_types;
 import fact_pack.category_data;
 
 public const static string[] ALTERNATE_ITEM_TYPES = [
-    "ammo", "armor", "blueprint", "capsule", "deconstruction-item", "fluid", "gun", "item",
-    "mining-tool", "module", "repair-tool", "tool", "rail-planner", "blueprint-book"
+    "ammo", "armor", "blueprint", "capsule", "deconstruction-item", "fluid",
+    "gun", "item", "mining-tool", "module", "repair-tool", "tool",
+    "rail-planner", "blueprint-book"
 ];
 
 class ModInfo
@@ -143,15 +144,16 @@ class Packdata
 
         this.map_info_types();
 
-        foreach(ref assem; this.assemblingMachines)
+        foreach (ref assem; this.assemblingMachines)
         {
-            foreach(ref cat; assem.crafting_categories)
+            foreach (ref cat; assem.crafting_categories)
             {
                 this.craftCategoryMap[cat] ~= assem;
             }
         }
         foreach (ref Technology t; this.technology)
         {
+            sort!((a, b) => sort_order!(ItemAmount*)(a,b))(t.unit.ingredients);
             foreach (ref string req_name; t._prerequisites)
             {
                 Technology* req_tech = req_name in this.technology;
@@ -171,9 +173,7 @@ class Packdata
         }
 
         this.sorted_tech = this.technology.keys.dup;
-        sort(this.sorted_tech);
-
-        // writeln("Loaded JSON");
+        sort!((a, b) => sort_order!(Technology)(this.technology[a], this.technology[b]))(this.sorted_tech);
     }
 
     private void map_info_types()
@@ -363,6 +363,7 @@ class Packdata
             }
         }
 
+        sort!((a, b) => sort_order!(Recipe*)(a, b))(ret);
         return ret;
     }
 
@@ -382,6 +383,44 @@ class Packdata
             }
         }
 
+        sort!((a, b) => sort_order!(Recipe*)(a, b))(ret);
         return ret;
+    }
+
+    public bool sort_order(T)(const(T) a, const(T) b)
+    {
+        import std.math : cmp;
+
+        static if (is(T : ItemAmount*)) {
+            Craftable* newA = find_craftable(a.info_type, a.name);
+            Craftable* newB = find_craftable(b.info_type, b.name);
+            return this.sort_order!(Craftable*)(newA, newB);
+        }
+
+        static if (__traits(compiles, a.category))
+        {
+            if (a.category != b.category)
+            {
+                return a.category < b.category;
+            }
+        }
+        static if (__traits(compiles, a.subgroup))
+        {
+            if (a.subgroup != b.subgroup)
+            {
+                return a.subgroup < b.subgroup;
+            }
+        }
+        static if (__traits(compiles, a.order))
+        {
+            if (a.order != b.order)
+            {
+                return a.order < b.order;
+            }
+        }
+        static if (__traits(compiles, a.title))
+        {
+            return a.title < b.title;
+        }
     }
 }
