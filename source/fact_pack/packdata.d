@@ -61,7 +61,7 @@ class Packdata
     AssemblingMachine*[][string] craftCategoryMap;
     string path;
     string[] sorted_tech;
-    JSONValue mem;
+    // JSONValue mem;
     protected Ini locale;
 
     void load_craftable(T)(ref T[string] store, ref JSONValue category)
@@ -94,7 +94,7 @@ class Packdata
         this.meta = fromJSONString!PackMetadata(cast(string) read(buildPath(packpath, "info.json")));
 
         auto raw_json = cast(char[]) read(buildPath(packpath, "out"));
-        this.mem = parseJSON(raw_json);
+        JSONValue mem = parseJSON(raw_json);
 
         locale = Ini();
         locale.parse(buildPath(packpath, "localedump.cfg"), false);
