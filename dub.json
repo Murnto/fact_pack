@@ -6,7 +6,7 @@
 	"description": "A minimal D application.",
 	"copyright": "Copyright © 2016, dave",
 	"dependencies": {
-		"jsonizer": "~>0.7.0",
+		"jsonizer": "==0.7.0",
 		"dini": "~>1.0.1"
 	},
 	"license": "proprietary"
