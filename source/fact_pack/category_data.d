@@ -81,7 +81,19 @@ mixin template CategoryData()
 {
     private CDHeader[] cachedHeaders;
 
-    string[] parse(Packdata pd)
+    static if (__traits(hasMember, typeof(this), "parse")) {
+        override string[] parse(Packdata pd)
+        {
+            return this._parse(pd);
+        }
+    } else {
+        string[] parse(Packdata pd)
+        {
+            return this._parse(pd);
+        }
+    }
+
+    private string[] _parse(Packdata pd)
     {
         import std.algorithm : reverse;
         import std.conv : to;
