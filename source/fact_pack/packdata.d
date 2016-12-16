@@ -14,9 +14,9 @@ import fact_pack.all_types;
 import fact_pack.category_data;
 
 public const static string[] ALTERNATE_ITEM_TYPES = [
-    "ammo", "armor", "blueprint", "capsule", "deconstruction-item", "fluid",
-    "gun", "item", "mining-tool", "module", "repair-tool", "tool",
-    "rail-planner", "blueprint-book"
+    "ammo", "armor", "blueprint", "capsule", "car", "cargo-wagon",
+    "locomotive", "deconstruction-item", "fluid", "gun", "item", "mining-tool",
+    "module", "repair-tool", "tool", "rail-planner", "blueprint-book"
 ];
 
 class ModInfo
