@@ -18,7 +18,7 @@ struct ItemAmount
 
     this(JSONValue jv)
     {
-        if ("1" in jv)
+        if ("1" in jv && !("name" in jv)) // wtf dytech?
         {
             this.name = jv["1"].str;
             this.amount = fromJSON!real(jv["2"]);
