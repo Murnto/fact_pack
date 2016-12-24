@@ -15,7 +15,7 @@ class Resource : BasicEnt
     mixin JsonizeMe!(JsonizeIgnoreExtraKeys.no);
 
     @CDItem("Map Color", "hexMapColor()", true) real[3] map_color;
-    JSONValue minable; // optional
+    bool minable; // optional
     @CDItem("Normal", "isNaN(normal) ? \"\" : to!string(normal)") real normal; // optional
     @CDItem("Minimum", "isNaN(minimum) ? \"\" : to!string(minimum)") real minimum; // optional
     @CDItem("Mining time") real mining_time; // optional
@@ -36,7 +36,7 @@ class Resource : BasicEnt
         this.order = order;
         this.map_color = [fromJSON!real(map_color["r"]),
             fromJSON!real(map_color["g"]), fromJSON!real(map_color["b"])];
-        this.minable = minable;
+        this.minable = !minable.isNull;
         this.category = category;
         this.normal = normal;
         this.minimum = minimum;
