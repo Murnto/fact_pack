@@ -16,6 +16,7 @@ class BasicEnt
     @jsonize(JsonizeIn.opt) string order;
     @CDItem("Name", "getEntAnchor(pd.meta.name)", true) string title;
     @CDItem("Icon", "getIconImg(pd.meta.name)", true) @jsonize(JsonizeIn.opt) string icon;
+    string description;
 
     protected string getIconImg(string packName)
     {

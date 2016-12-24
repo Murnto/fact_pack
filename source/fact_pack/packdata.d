@@ -72,6 +72,7 @@ class Packdata
             store[foo.name] = foo;
 
             foo.title = this.resolve_locale_name(foo);
+            foo.description = this.resolve_description(foo.name);
             foo.uses = this.find_recipes_using(foo.type, foo.name);
             foo.recipes = this.find_recipes_producing(foo.type, foo.name);
         }
@@ -85,6 +86,7 @@ class Packdata
             store[foo.name] = foo;
 
             foo.title = this.resolve_locale_name(foo);
+            foo.description = this.resolve_description(foo.name);
         }
     }
 
@@ -115,6 +117,7 @@ class Packdata
             Technology foo = val.fromJSON!Technology;
             this.technology[foo.name] = foo;
             foo.title = this.resolve_locale_name(foo);
+            foo.description = this.get_technology_description(foo.name);
 
             // annotate recipes unlocked by this technology
             foreach (string recipe_name; foo._unlocks_recipes)
@@ -204,6 +207,53 @@ class Packdata
                 amt.info_type = cft ? cft.type : amt.type;
             }
         }
+    }
+
+    string resolve_description(const string name)
+    {
+        string desc;
+
+        if ((desc = this.get_item_description(name)) != null)
+        {
+            return desc;
+        }
+        else if ((desc = this.get_entity_description(name)) != null)
+        {
+            return desc;
+        }
+        else if ((desc = this.get_technology_description(name)) != null)
+        {
+            return desc;
+        }
+        
+        return null;
+    }
+
+    string get_technology_description(const string name)
+    {
+        if (this.locale["technology-description"].hasKey(name)) {
+            return this.locale["technology-description"].getKey(name);
+        }
+
+        return null;
+    }
+
+    string get_item_description(const string name)
+    {
+        if (this.locale["item-description"].hasKey(name)) {
+            return this.locale["item-description"].getKey(name);
+        }
+
+        return null;
+    }
+
+    string get_entity_description(const string name)
+    {
+        if (this.locale["entity-description"].hasKey(name)) {
+            return this.locale["entity-description"].getKey(name);
+        }
+
+        return null;
     }
 
     string resolve_locale_name(const ref BasicEnt ent)
