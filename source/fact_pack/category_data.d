@@ -63,7 +63,10 @@ mixin template EnumerateCategoryData()
                         // pragma(msg, "    ", isAssignable!(BasicEnt, VType));
                         auto cdc = CDContainer();
                         mixin("cdc.ents = cast(BasicEnt[])" ~ mem ~ ".values();");
-                        mixin("cdc.headers = " ~ mem ~ ".values()[0].getHeaders();");
+                        mixin("auto len = " ~ mem ~ ".length;");
+                        if (len) {
+                            mixin("cdc.headers = " ~ mem ~ ".values()[0].getHeaders();");
+                        }
                         cdc.title = chomp(replaceAll(VType.stringof, regex("([A-Z])"), " $1")) ~ "s";
                         sort!((a, b) => sort_order!(BasicEnt)(a,b))(cdc.ents);
                         cdc.name = mem;

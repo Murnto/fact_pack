@@ -78,8 +78,14 @@ class Packdata
         }
     }
 
-    void load_json(T)(ref T[string] store, ref JSONValue category)
+    void load_json(T)(ref T[string] store, ref JSONValue mem, string cat)
     {
+        if (cat !in mem) {
+            writeln("Pack '", meta.name, "' missing '", cat, "' category!");
+            return;
+        }
+
+        JSONValue category = mem[cat];
         foreach (string key, ref JSONValue val; category)
         {
             T foo = val.fromJSON!T;
@@ -101,16 +107,16 @@ class Packdata
         locale = Ini();
         locale.parse(buildPath(packpath, "localedump.cfg"), false);
 
-        load_json(this.recipes, mem["recipe"]);
-        load_json(this.item_subgroups, mem["item-subgroup"]);
-        load_json(this.resources, mem["resource"]);
-        load_json(this.generators, mem["generator"]);
-        load_json(this.solarPanels, mem["solar-panel"]);
-        load_json(this.steamBoilers, mem["boiler"]);
-        load_json(this.accumulators, mem["accumulator"]);
-        load_json(this.furnaces, mem["furnace"]);
-        load_json(this.miningDrills, mem["mining-drill"]);
-        load_json(this.assemblingMachines, mem["assembling-machine"]);
+        load_json(this.recipes, mem, "recipe");
+        load_json(this.item_subgroups, mem, "item-subgroup");
+        load_json(this.resources, mem, "resource");
+        load_json(this.generators, mem, "generator");
+        load_json(this.solarPanels, mem, "solar-panel");
+        load_json(this.steamBoilers, mem, "boiler");
+        load_json(this.accumulators, mem, "accumulator");
+        load_json(this.furnaces, mem, "furnace");
+        load_json(this.miningDrills, mem, "mining-drill");
+        load_json(this.assemblingMachines, mem, "assembling-machine");
 
         foreach (string key, ref JSONValue val; mem["technology"])
         {
