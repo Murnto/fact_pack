@@ -129,7 +129,7 @@ class Burner
     mixin CategoryData;
     mixin JsonizeMe;
 
-    @jsonize
+    @jsonize(JsonizeIn.opt)
     {
         @CDItem("Effectivity") real effectivity;
         @CDItem("Emissions", "round(emissions * 100) / 100") real emissions;
