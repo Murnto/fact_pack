@@ -24,15 +24,14 @@ class Resource : BasicEnt
     @CDItem("Infinite", "infinite ? \"Yes\" : \"No\"") bool infinite; // optional
     @CDItem("Category") string category;
 
-    @jsonize this(string type, string name, string icon, string order,
-        JSONValue map_color, JSONValue minable = null,
+    @jsonize this(string type, string name, string order, JSONValue map_color, 
+        string icon = null, JSONValue icons = null, JSONValue minable = null,
         string category = "basic-solid", real normal = real.nan,
         real minimum = real.nan, bool map_grid = true, bool infinite = false)
     {
-
         this.type = type;
         this.name = name;
-        this.icon = icon;
+        this.icon = icon; // TODO FIXME new icon can be present in icons and also specify a tint!
         this.order = order;
         this.map_color = [fromJSON!real(map_color["r"]),
             fromJSON!real(map_color["g"]), fromJSON!real(map_color["b"])];
