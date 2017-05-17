@@ -20,3 +20,4 @@ public import fact_pack.types.accumulator;
 public import fact_pack.types.steam_boiler;
 public import fact_pack.types.solar_panel;
 public import fact_pack.types.generator;
+public import fact_pack.types.module_item;

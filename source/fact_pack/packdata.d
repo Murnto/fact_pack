@@ -54,6 +54,7 @@ class Packdata
     Technology[string] technology;
     Furnace[string] furnaces;
     MiningDrill[string] miningDrills;
+    Module[string] modules;
     Accumulator[string] accumulators;
     AssemblingMachine[string] assemblingMachines;
     PackMetadata meta;
@@ -116,6 +117,7 @@ class Packdata
         load_json(this.accumulators, mem, "accumulator");
         load_json(this.furnaces, mem, "furnace");
         load_json(this.miningDrills, mem, "mining-drill");
+        load_json(this.modules, mem, "module");
         load_json(this.assemblingMachines, mem, "assembling-machine");
 
         foreach (string key, ref JSONValue val; mem["technology"])
