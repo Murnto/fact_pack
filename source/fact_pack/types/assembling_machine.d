@@ -22,13 +22,19 @@ class AssemblingMachine : BasicEnt
     string[] allowed_effects;
     JSONValue _module_specification;
 
-    @jsonize this(string name, string icon, string type, real crafting_speed,
+    @jsonize this(string name, string type, real crafting_speed,
         string energy_usage, JSONValue energy_source, int ingredient_count,
         JSONValue crafting_categories, JSONValue allowed_effects = null,
-        JSONValue module_specification = null)
+        JSONValue module_specification = null, string icon = null, JSONValue icons = null)
     {
         this.name = name;
-        this.icon = icon;
+        if (icon != null) {
+            this.icon = icon;
+        } else if (!icons.isNull) {
+            this.icon = icons["1"]["icon"].str; // FIXME
+        } else {
+            writeln(this.name, "couldn't find icon!");
+        }
         this.type = type;
         this.ingredient_count = ingredient_count;
         this.crafting_speed = crafting_speed;
